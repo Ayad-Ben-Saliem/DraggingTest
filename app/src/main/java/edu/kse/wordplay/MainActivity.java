@@ -9,28 +9,27 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainTAG";
-    private static final String TAG2 = "MainTAG2";
-    private float x;
-    private float y;
 
-    ViewGroup.LayoutParams layoutParams;
     ViewGroup rootLayout;
     View view1;
     View view2;
     View view3;
 
-    GridLayout gridLayout;
+    View draggedView;
 
-    private static final List<View> views = new ArrayList<>();
-//    static View draggedView;
-    static int index;
+    final Map<View, Integer> draggedViews = new HashMap<>();
+
+    GridLayout gridLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,68 +42,98 @@ public class MainActivity extends AppCompatActivity {
         view3 = findViewById(R.id.view3);
         gridLayout = findViewById(R.id.gridLayout);
 
+        draggedViews.put(view1, 0);
+        draggedViews.put(view2, 1);
+        draggedViews.put(view3, 2);
+
         view1.setOnTouchListener(this::startDragging);
         view2.setOnTouchListener(this::startDragging);
         view3.setOnTouchListener(this::startDragging);
 
-        views.add(view1);
-        views.add(view2);
-        views.add(view3);
+        rootLayout.setOnDragListener((view, event) -> {
+            switch (event.getAction()){
+                case DragEvent.ACTION_DROP:
+                    float x = event.getX(); // - draggedView.getWidth()/2;
+                    float y = event.getY(); // - draggedView.getHeight()/2;
 
-        View.OnDragListener viewsDragListener = (v, event) -> {
-            if(v.equals(view1))
-                index = 0;
-            else if(v.equals(view2))
-                index = 1;
-            else if(v.equals(view3))
-                index = 2;
+                    Log.i(TAG, "X : " + x);
+                    Log.i(TAG, "Y : " + y);
 
-            Log.d(TAG, "INDEX : " + index + " : " + views.get(index));
+                    int index = draggedViews.get(draggedView);
+                    View viewInGrid = gridLayout.getChildAt(index);
 
-            return false;
-        };
+                    Point point1 = new Point(x, y);
+                    Point point2 = getLocation(viewInGrid);
+                    double distance = point1.getDistance(point2);
 
-        view1.setOnDragListener(viewsDragListener);
-        view2.setOnDragListener(viewsDragListener);
-        view3.setOnDragListener(viewsDragListener);
+                    float dx = viewInGrid.getWidth()/2;
+                    float dy = viewInGrid.getHeight()/2;
+                    double v = Math.pow(dx, 2) + Math.pow(dy, 2);
+                    double radius = Math.sqrt(v);
 
-        rootLayout.setOnDragListener(new MyDragEventListener());
+                    Log.i(TAG, "index    : " + index);
+                    Log.i(TAG, "point : " + distance);
+                    Log.i(TAG, "radius   : " + radius);
+                    Log.i(TAG, "distance : " + distance);
+                    Log.i(TAG, "radius   : " + radius);
 
-        int[] colors = {Color.GREEN, Color.BLUE, Color.YELLOW};
-        for(int i=0; i<gridLayout.getChildCount(); i++){
+                    if(distance <= radius){
+                        Toast.makeText(this, "Merge", Toast.LENGTH_LONG).show();
+                    }else {
+                        draggedView.setVisibility(View.VISIBLE);
+                    }
+            }
+
+            return true;
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        int colors[] = {Color.YELLOW, Color.CYAN, Color.GRAY};
+        for (int i=0; i<gridLayout.getChildCount(); i++){
             gridLayout.getChildAt(i).setBackgroundColor(colors[i]);
         }
     }
 
-
     protected boolean startDragging(View view, MotionEvent event){
-        view.startDrag(null,
-                        new View.DragShadowBuilder(view),
-                        null,
-                        0);
-        view.setVisibility(View.INVISIBLE);
+        draggedView = view;
+        draggedView.startDrag(
+                null,
+                new View.DragShadowBuilder(view),
+                null,
+                0);
+        draggedView.setVisibility(View.INVISIBLE);
 
         return true;
     }
 
+    Point getLocation(View view){
+        int outLocation[] = {0, 0};
+        view.getLocationOnScreen(outLocation);
 
-    protected class MyDragEventListener implements View.OnDragListener {
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-//            Log.d(TAG, event.toString());
+        float x = outLocation[0] + view.getWidth()/2;
+        float y = outLocation[1] + view.getHeight()/2;
 
-            switch (event.getAction()){
-                case DragEvent.ACTION_DROP:
-                case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG, "index : " + index);
-                    views.get(index).setVisibility(View.VISIBLE);
-            }
+        return new Point(x, y);
+    }
 
-            x = event.getX();
-            y = event.getY();
+    class Point {
+        final float x;
+        final float y;
 
-            return true;
+        Point(float x, float y) {
+            this.x = x;
+            this.y = y;
         }
-    };
 
+        double getDistance(Point point){
+            float dx = x - point.x;
+            float dy = y - point.y;
+            double v = Math.pow(dx, 2) + Math.pow(dy, 2);
+            return Math.sqrt(v);
+        }
+    }
 }

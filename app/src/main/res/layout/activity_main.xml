@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
@@ -46,26 +47,32 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:foregroundGravity="center"
+        android:layoutDirection="rtl"
         app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <View
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_columnWeight="1"
+            android:background="@color/colorAccent"/>
 
         <View
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_columnWeight="1"
+            android:background="@mipmap/ic_launcher"/>
 
         <View
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_columnWeight="1"
+            android:background="@color/colorPrimaryDark"/>
 
     </android.support.v7.widget.GridLayout>
+
 </android.support.constraint.ConstraintLayout>
