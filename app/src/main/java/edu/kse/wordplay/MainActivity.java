@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     double radius = Math.sqrt(v);
 
                     Log.i(TAG, "index    : " + index);
-                    Log.i(TAG, "point : " + distance);
-                    Log.i(TAG, "radius   : " + radius);
+                    Log.i(TAG, "point1 : " + point1);
+                    Log.i(TAG, "point2 : " + point2);
                     Log.i(TAG, "distance : " + distance);
                     Log.i(TAG, "radius   : " + radius);
 
