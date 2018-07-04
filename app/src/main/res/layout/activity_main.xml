@@ -8,11 +8,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </Toolbar>
+
     <TextView
         android:id="@+id/view1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="أ"
+        android:background="@color/colorAccent"
         android:textSize="@android:dimen/notification_large_icon_width"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,19 +38,21 @@
         android:id="@+id/view2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="56dp"
+        android:background="@color/colorAccent"
         android:text="س"
         android:textSize="@android:dimen/notification_large_icon_width"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintHorizontal_bias="0.181"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/view3"
         android:layout_width="wrap_content"
         android:layout_height="85dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="200dp"
+        android:background="@color/colorAccent"
         android:text="د"
         android:textSize="@android:dimen/notification_large_icon_width"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,30 +62,33 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
         android:layoutDirection="rtl"
-        app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <View
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_columnWeight="1"
+            android:text="أ"
+            android:textSize="50sp"
             android:background="@color/colorAccent"/>
 
-        <View
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_columnWeight="1"
-            android:background="@mipmap/ic_launcher"/>
+            android:text="س"
+            android:textSize="50sp"
+            android:background="@color/colorPrimary"/>
 
-        <View
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_columnWeight="1"
+            android:text="د"
+            android:textSize="50sp"
             android:background="@color/colorPrimaryDark"/>
 
     </android.support.v7.widget.GridLayout>

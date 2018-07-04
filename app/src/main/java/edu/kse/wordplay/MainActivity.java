@@ -9,9 +9,9 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainTAG";
 
     ViewGroup rootLayout;
-    View view1;
-    View view2;
-    View view3;
+    TextView view1;
+    TextView view2;
+    TextView view3;
 
-    View draggedView;
+    TextView draggedView;
 
     final Map<View, Integer> draggedViews = new HashMap<>();
 
@@ -36,12 +36,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String s = "ABC" + draggedViews;
+
         rootLayout = findViewById(R.id.rootLayout);
         view1 = findViewById(R.id.view1);
         view2 = findViewById(R.id.view2);
         view3 = findViewById(R.id.view3);
         gridLayout = findViewById(R.id.gridLayout);
 
+        try {
+
+            TextView view4 = new TextView(this);
+            TextView view5 = new TextView(this);
+            TextView view6 = new TextView(this);
+
+            view4.setText(view1.getText());
+            view5.setText(view2.getText());
+            view6.setText(view3.getText());
+
+            view4.setTextSize(30);
+            view5.setTextSize(30);
+            view6.setTextSize(30);
+
+            gridLayout.addView(view4);
+            gridLayout.addView(view5);
+            gridLayout.addView(view6);
+        }catch (Throwable t){
+            Log.e(TAG, "Error", t);
+        }
         draggedViews.put(view1, 0);
         draggedViews.put(view2, 1);
         draggedViews.put(view3, 2);
@@ -50,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
         view2.setOnTouchListener(this::startDragging);
         view3.setOnTouchListener(this::startDragging);
 
-        rootLayout.setOnDragListener((view, event) -> {
-            switch (event.getAction()){
+        rootLayout.setOnDragListener((view, dragEvent) -> {
+            switch (dragEvent.getAction()){
                 case DragEvent.ACTION_DROP:
-                    float x = event.getX(); // - draggedView.getWidth()/2;
-                    float y = event.getY(); // - draggedView.getHeight()/2;
+                    float x = dragEvent.getX(); // - draggedView.getWidth()/2;
+                    float y = dragEvent.getY(); // - draggedView.getHeight()/2;
 
                     Log.i(TAG, "X : " + x);
                     Log.i(TAG, "Y : " + y);
 
                     int index = draggedViews.get(draggedView);
-                    View viewInGrid = gridLayout.getChildAt(index);
+                    TextView viewInGrid = (TextView)gridLayout.getChildAt(index);
 
                     Point point1 = new Point(x, y);
                     Point point2 = getLocation(viewInGrid);
@@ -79,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
                     if(distance <= radius){
                         Toast.makeText(this, "Merge", Toast.LENGTH_LONG).show();
+                        viewInGrid.setText(draggedView.getText());
+                        rootLayout.removeView(draggedView);
                     }else {
                         draggedView.setVisibility(View.VISIBLE);
                     }
@@ -99,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected boolean startDragging(View view, MotionEvent event){
-        draggedView = view;
+        draggedView = (TextView)view;
         draggedView.startDrag(
                 null,
                 new View.DragShadowBuilder(view),
@@ -134,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
             float dy = y - point.y;
             double v = Math.pow(dx, 2) + Math.pow(dy, 2);
             return Math.sqrt(v);
+        }
+
+        @Override
+        public String toString(){
+            return "(" + x + ", " + y + ")";
         }
     }
 }
