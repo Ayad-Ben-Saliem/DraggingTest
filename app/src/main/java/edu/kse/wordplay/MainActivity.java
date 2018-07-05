@@ -3,6 +3,8 @@ package edu.kse.wordplay;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.DragEvent;
@@ -21,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainTAG";
 
     ViewGroup rootLayout;
-    TextView view1;
-    TextView view2;
-    TextView view3;
+    MyView view1;
+    MyView view2;
+    MyView view3;
 
     TextView draggedView;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         String s = "ABC" + draggedViews;
 
@@ -44,26 +47,26 @@ public class MainActivity extends AppCompatActivity {
         view3 = findViewById(R.id.view3);
         gridLayout = findViewById(R.id.gridLayout);
 
-        try {
+        gridLayout.setColumnCount(3);
 
-            TextView view4 = new TextView(this);
-            TextView view5 = new TextView(this);
-            TextView view6 = new TextView(this);
+        gridLayout.addView(getCharViewCopy(view1));
+        gridLayout.addView(getCharViewCopy(view2));
+        gridLayout.addView(getCharViewCopy(view3));
 
-            view4.setText(view1.getText());
-            view5.setText(view2.getText());
-            view6.setText(view3.getText());
+        MyView.OnDrawCompleteListener onDrawCompleteListener = view -> {
+            AppCompatImageView imageView = new AppCompatImageView(this);
+            imageView.setImageResource(R.drawable.dot_line);
 
-            view4.setTextSize(30);
-            view5.setTextSize(30);
-            view6.setTextSize(30);
+            imageView.setMinimumHeight(100);
+            imageView.setMinimumWidth(view1.getWidth());
 
-            gridLayout.addView(view4);
-            gridLayout.addView(view5);
-            gridLayout.addView(view6);
-        }catch (Throwable t){
-            Log.e(TAG, "Error", t);
-        }
+            gridLayout.addView(imageView);
+        };
+
+        view1.setOnDrawCompleteListener(onDrawCompleteListener);
+        view2.setOnDrawCompleteListener(onDrawCompleteListener);
+        view3.setOnDrawCompleteListener(onDrawCompleteListener);
+
         draggedViews.put(view1, 0);
         draggedViews.put(view2, 1);
         draggedViews.put(view3, 2);
@@ -112,14 +115,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private TextView getCharViewCopy(TextView textView){
+        TextView view = new TextView(this);
+        view.setText(textView.getText());
+        view.setTextSize(50);
+        return view;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        int colors[] = {Color.YELLOW, Color.CYAN, Color.GRAY};
-        for (int i=0; i<gridLayout.getChildCount(); i++){
-            gridLayout.getChildAt(i).setBackgroundColor(colors[i]);
-        }
+//        int colors[] = {Color.YELLOW, Color.CYAN, Color.GRAY};
+//        for (int i=0; i<gridLayout.getChildCount(); i++){
+//            gridLayout.getChildAt(i).setBackgroundColor(colors[i]);
+//        }
     }
 
     protected boolean startDragging(View view, MotionEvent event){

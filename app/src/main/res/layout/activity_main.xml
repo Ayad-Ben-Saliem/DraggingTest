@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+ <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,7 +20,7 @@
 
     </Toolbar>
 
-    <TextView
+    <edu.kse.wordplay.MyView
         android:id="@+id/view1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.24" />
 
-    <TextView
+    <edu.kse.wordplay.MyView
         android:id="@+id/view2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <TextView
+    <edu.kse.wordplay.MyView
         android:id="@+id/view3"
         android:layout_width="wrap_content"
         android:layout_height="85dp"
@@ -64,32 +64,38 @@
         android:id="@+id/gridLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
         android:layoutDirection="rtl"
+        android:background="@color/colorAccent"
+        app:columnCount="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="أ"
-            android:textSize="50sp"
-            android:background="@color/colorAccent"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="أ"-->
+            <!--android:textSize="50sp"-->
+            <!--android:background="@color/colorAccent"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="س"
-            android:textSize="50sp"
-            android:background="@color/colorPrimary"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="س"-->
+            <!--android:textSize="50sp"-->
+            <!--android:background="@color/colorPrimary"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="د"
-            android:textSize="50sp"
-            android:background="@color/colorPrimaryDark"/>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="د"-->
+            <!--android:textSize="50sp"-->
+            <!--android:background="@color/colorPrimaryDark"/>-->
+
+        <!--<android.support.v7.widget.AppCompatImageView-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="10dp"-->
+            <!--android:src="@drawable/dot_line"/>-->
 
     </android.support.v7.widget.GridLayout>
 
