@@ -11,6 +11,6 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
 
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, RecyclerViewPractice.class));
     }
 }

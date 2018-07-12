@@ -1,6 +1,5 @@
 package edu.kse.wordplay;
 
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
@@ -15,17 +14,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainTAG";
 
     ViewGroup rootLayout;
-    MyView view1;
-    MyView view2;
-    MyView view3;
+    MyTextView view1;
+    MyTextView view2;
+    MyTextView view3;
 
     TextView draggedView;
 
@@ -39,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
-        String s = "ABC" + draggedViews;
-
         rootLayout = findViewById(R.id.rootLayout);
         view1 = findViewById(R.id.view1);
         view2 = findViewById(R.id.view2);
@@ -49,18 +46,21 @@ public class MainActivity extends AppCompatActivity {
 
         gridLayout.setColumnCount(3);
 
-        gridLayout.addView(getCharViewCopy(view1));
-        gridLayout.addView(getCharViewCopy(view2));
-        gridLayout.addView(getCharViewCopy(view3));
+        addCharsToGridLayout();
 
-        MyView.OnDrawCompleteListener onDrawCompleteListener = view -> {
-            AppCompatImageView imageView = new AppCompatImageView(this);
-            imageView.setImageResource(R.drawable.dot_line);
+        MyTextView.OnDrawCompleteListener onDrawCompleteListener = view -> {
+            if(view.getDrawCount() == 1) {
+                AppCompatImageView imageView = new AppCompatImageView(this);
 
-            imageView.setMinimumHeight(100);
-            imageView.setMinimumWidth(view1.getWidth());
+                imageView.setMinimumHeight((int) getResources().getDimension(R.dimen.dot_line_height));
+                imageView.setMinimumWidth(view.getWidth());
+                imageView.setImageResource(R.drawable.dot_line);
+                imageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                imageView.setBackgroundColor(new Random().nextInt(1000000000) + 1000000000);
 
-            gridLayout.addView(imageView);
+                Log.i(TAG, view.getText().toString());
+                gridLayout.addView(imageView);
+            }
         };
 
         view1.setOnDrawCompleteListener(onDrawCompleteListener);
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(distance <= radius){
                         Toast.makeText(this, "Merge", Toast.LENGTH_LONG).show();
-                        viewInGrid.setText(draggedView.getText());
+                        viewInGrid.setVisibility(View.VISIBLE);
                         rootLayout.removeView(draggedView);
                     }else {
                         draggedView.setVisibility(View.VISIBLE);
@@ -113,6 +113,21 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+    }
+
+    private void addCharsToGridLayout() {
+
+        View view1Copy = getCharViewCopy(view1);
+        View view2Copy = getCharViewCopy(view2);
+        View view3Copy = getCharViewCopy(view3);
+
+        view1Copy.setVisibility(View.INVISIBLE);
+        view2Copy.setVisibility(View.INVISIBLE);
+        view3Copy.setVisibility(View.INVISIBLE);
+
+        gridLayout.addView(view1Copy);
+        gridLayout.addView(view2Copy);
+        gridLayout.addView(view3Copy);
     }
 
     private TextView getCharViewCopy(TextView textView){
